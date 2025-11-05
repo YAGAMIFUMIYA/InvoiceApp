@@ -1,50 +1,64 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:replace="fragments/header :: header">
-<head>
-    <meta charset="UTF-8">
-    <title>請求書フォーム</title>
-</head>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header"></head>
 <body>
-<h2 class="mb-4 text-center">請求書フォーム</h2>
+<div class="container">
+    <h2 class="mb-4 text-center">請求書フォーム</h2>
 
-<form th:action="@{/invoices/save}" th:object="${invoice}" method="post" class="card p-4 shadow-sm">
-    <input type="hidden" th:field="*{id}" />
+    <form th:action="@{/invoices/save}" th:object="${invoice}" method="post" class="card p-4 shadow-sm">
+        <input type="hidden" th:field="*{id}" />
 
-    <div class="mb-3">
-        <label class="form-label">顧客ID</label>
-        <input type="text" th:field="*{customerId}" class="form-control" placeholder="顧客IDを入力">
-    </div>
+<!--        <div class="mb-3">-->
+<!--            <label class="form-label">顧客ID</label>-->
+<!--            <input type="text" th:field="*{customerId}" class="form-control" placeholder="顧客IDを入力">-->
+<!--        </div>-->
 
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label class="form-label">発行日</label>
-            <input type="date" th:field="*{issueDate}" class="form-control">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">発行日</label>
+                <input type="date" th:field="*{issueDate}" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">支払期日</label>
+                <input type="date" th:field="*{dueDate}" class="form-control">
+            </div>
         </div>
-        <div class="col-md-6 mb-3">
-            <label class="form-label">支払期日</label>
-            <input type="date" th:field="*{dueDate}" class="form-control">
+
+        <div class="mb-3">
+            <label class="form-label">金額</label>
+            <input type="number" th:field="*{amount}" class="form-control" placeholder="金額を入力">
         </div>
-    </div>
 
-    <div class="mb-3">
-        <label class="form-label">金額</label>
-        <input type="number" th:field="*{amount}" class="form-control" placeholder="金額を入力">
-    </div>
+        <div class="mb-3">
+            <label class="form-label">ステータス</label>
+            <select th:field="*{status}" class="form-select">
+                <option value="未払い">未払い</option>
+                <option value="支払い済み">支払い済み</option>
+            </select>
+            <label class="form-label">顧客ID</label>
+            <div class="d-flex">
+                    <input type="text" th:field="*{customerId}" class="form-control" placeholder="顧客IDを入力">
+                    <a th:if="${invoice != null and invoice.customerId != null}"
+                       th:href="@{'/customers/edit/' + ${invoice.customerId}}"
+                       class="btn btn-outline-secondary ms-2">顧客情報を見る</a>
+                    <a th:href="@{/customers/form}" class="btn btn-outline-success ms-2">顧客新規登録</a>
+            </div>
+            <label class="form-label">顧客様名</label>
+            <select th:field="*{customerId}" class="form-select">
+                <option th:each="c : ${customers}" th:value="${c.id}"
+                        th:text="${c.name} + ' (ID:' + ${c.id} + ')'">顧客選択</option>
+            </select>
 
-    <div class="mb-3">
-        <label class="form-label">ステータス</label>
-        <select th:field="*{status}" class="form-select">
-            <option value="未払い">未払い</option>
-            <option value="支払い済み">支払い済み</option>
-        </select>
-    </div>
+            <div class="mt-2">
+                <button type="submit" class="btn btn-primary px-4">保存</button>
+                <a th:href="@{/invoices}" class="btn btn-secondary px-4 ms-2">戻る</a>
+            </div>
+            </div>
 
-    <div class="text-center">
-        <button type="submit" class="btn btn-primary px-4">保存</button>
-        <a th:href="@{/invoices}" class="btn btn-secondary px-4 ms-2">戻る</a>
-    </div>
-</form>
+    </form>
+</div>
 
+<!-- フッター -->
 <th:block th:replace="fragments/footer :: footer"></th:block>
 </body>
 </html>
