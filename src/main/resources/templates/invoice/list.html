@@ -12,7 +12,6 @@
 <table class="table table-striped table-bordered">
     <thead class="table-dark">
     <tr>
-<!--        <th>ID</th>-->
         <th>顧客ID</th>
         <th>発行日</th>
         <th>支払期日</th>
@@ -25,7 +24,6 @@
     <tbody>
     <tr th:each="invoice : ${invoices}">
         <td th:text="${invoice.id}"></td>
-        <td th:text="${invoice.customerId}"></td>
         <td th:text="${invoice.issueDate}"></td>
         <td th:text="${invoice.dueDate}"></td>
         <td th:text="${invoice.amount}"></td>
@@ -35,11 +33,16 @@
             <a th:href="@{'/invoices/delete/' + ${invoice.id}}" class="btn btn-danger btn-sm"
                onclick="return confirm('本当に削除しますか？');">削除</a>
         </td>
+        <!-- ここに顧客ページへのリンクを追加（ループ内なので ${invoice} が解決される） -->
+        <td>
+            <a th:if="${invoice.customerId != null}"
+               th:href="@{'/customers/edit/' + ${invoice.customerId}}"
+               th:text="${'顧客ID: ' + invoice.customerId}">顧客</a>
+            <span th:unless="${invoice.customerId != null}">未指定</span>
+        </td>
     </tr>
     </tbody>
 </table>
-<!-- 顧客ID をクリックすると該当顧客の編集ページへ遷移 -->
-<a th:href="@{'/customers/edit/' + ${invoice.customerId}}"
-   th:text="${invoice.customerId}">顧客</a>
+
 </body>
 </html>
