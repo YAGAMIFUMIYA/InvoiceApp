@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>顧客フォーム</title>
+</head>
+<body>
+<h2 th:text="${customer.id == null} ? '新規登録' : '顧客情報編集'"></h2>
+
+<form th:action="@{/customers/save}" method="post" th:object="${customer}">
+    <input type="hidden" th:field="*{id}">
+
+    <div>
+        <label>名前:</label>
+        <input type="text" th:field="*{name}" required>
+    </div>
+
+    <div>
+        <label>メール:</label>
+        <input type="email" th:field="*{email}" required>
+    </div>
+
+    <div>
+        <label>電話番号:</label>
+        <input type="text" th:field="*{phone}" required>
+    </div>
+
+    <div>
+        <button type="submit">保存</button>
+        <a th:href="@{/customers}">戻る</a>
+    </div>
+</form>
+
+</body>
+</html>
